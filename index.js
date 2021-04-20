@@ -52,15 +52,20 @@ function init() {
     .then((answers) => {
       if(answers.init == "View all employees") {
         // use connection.query to list out all of the employee names and information about them.
+        // use join
+        viewAll();
       } else if (answers.init == "View all employees by department") {
+        //   join
         // use inquirer to prompt which department then display employees for that department.
       } else if (answers.init == "View all employees by Manager") {
+        //   join
         //   use inquirer to ask which manager then display employees for that manager
       } else if (answers.init == "Add employee") {
         //  use CREATE to add data to table
         create();
       } else if (answers.init == "Remove employee") {
         //   use DELETE to remove employee
+        remove();
       } else if (answers.init == "Update employee role") {
         //   use UPDATE to update employee role
       } else if (answers.init == "Update employee manager") {
@@ -70,6 +75,52 @@ function init() {
       }
     });
 };
+
+
+
+// const viewAll = () => {
+
+// }
+
+const remove = () => {
+    inquirer
+    .prompt([
+      {
+      type: `input`,
+      message: "What is the first name of the employee you would like to remove?",
+      name: `remove`
+      },
+      {
+        type: `input`,
+        message: "What is the employee's department ID?",
+        name: `id`
+      },
+      {
+        type: `input`,
+        message: "What is the employee's title?",
+        name: `title`
+      },
+      ])
+      .then((answers) => {
+          connection.query(`DELETE FROM department WHERE id = ${answers.id};`), (err, res) => {
+              if (err) throw err;
+            } 
+          connection.query(`DELETE FROM role WHERE title = ${answers.title};`), (err, res) => {
+                if (err) throw err;
+            } 
+          connection.query(`DELETE FROM employee WHERE first_name = ${answers.remove};`), (err, res) => {
+            if (err) throw err;
+            }  
+
+            //* Only the first query works!!!!!!!!!!!!!
+            
+          console.log("Employee Removed!!!")  
+        init();
+  
+    }); 
+};
+
+
 
 // add employee
 const create = () => {
@@ -122,17 +173,19 @@ const create = () => {
       },
     ])
     .then((answers) => {
-      connection.query(`INSERT INTO department (id, name) VALUES (${answers.dep_id}, ${answers.dep_name}`), (err, res) => {
+      connection.query(`INSERT INTO department (id, name) VALUES (${answers.dep_id}, '${answers.dep_name}')`), (err, res) => {
         if (err) throw err;
-      }        
+      };        
 
-      connection.query(`INSERT INTO role (id, title, salary, department_id) VALUES (${answers.role_id}, ${answers.role_title}, ${answers.role_salary}, ${answers.dep_id}`), (err, res) => {
+      connection.query(`INSERT INTO role (id, title, salary, department_id) VALUES (${answers.role_id}, '${answers.role_title}', ${answers.role_salary}, ${answers.dep_id})`), (err, res) => {
         if (err) throw err;
-      }        
+      };        
 
-      connection.query(`INSERT INTO employee (id, first_name, last_name, role_id, manager_id) VALUES (${answers.emp_id}, ${answers.emp_fn}, ${answers.emp_ln}, ${answers.manager_id}`), (err, res) => {
+      connection.query(`INSERT INTO employee (id, first_name, last_name, role_id, manager_id) VALUES (${answers.emp_id}, '${answers.emp_fn}', '${answers.emp_ln}', ${answers.role_id}, ${answers.manager_id})`), (err, res) => {
         if (err) throw err;
-      }        
+      };        
+
+      init();
     });
       
 };
