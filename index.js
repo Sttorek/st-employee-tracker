@@ -68,31 +68,24 @@ function init() {
     });
 }
 
-
-
 const viewAll = () => {
-
-  console.log("-----------------View All Employees-----------------")
-  let query = "SELECT first_name, last_name, id FROM employee;"
+  console.log("-----------------View All Employees-----------------");
+  let query = "SELECT first_name, last_name, id FROM employee;";
   connection.query(query, function (err, res) {
     if (err) throw err;
     for (var i = 0; i < res.length; i++) {
-
       console.log(
-        "Name:  " + res[i].first_name + " " + res[i].last_name + "  ||  " + "ID: " + res[i].id
-        
-        );
-       
+        "Name:  " +
+          res[i].first_name +
+          " " +
+          res[i].last_name +
+          "  ||  " +
+          "ID: " +
+          res[i].id
+      );
     }
-
   });
 };
-
-
-
-
-
-
 
 const remove = () => {
   inquirer
@@ -110,24 +103,24 @@ const remove = () => {
         `DELETE FROM role WHERE employee_id = ${answers.remove};`,
         (err, res) => {
           if (err) throw err;
-        });
-        connection.query(
-          `DELETE FROM department WHERE employee_id = ${answers.remove};`,
-          (err, res) => {
-            if (err) throw err;
-          });
-          connection.query(
-            `DELETE FROM employee WHERE id = ${answers.remove};`,
-            (err, res) => {
-              if (err) throw err;
-              console.log("Employee Removed");
-              init();
-            });
+        }
+      );
+      connection.query(
+        `DELETE FROM department WHERE employee_id = ${answers.remove};`,
+        (err, res) => {
+          if (err) throw err;
+        }
+      );
+      connection.query(
+        `DELETE FROM employee WHERE id = ${answers.remove};`,
+        (err, res) => {
+          if (err) throw err;
+          console.log("Employee Removed");
+          init();
+        }
+      );
     });
 };
-
- 
-
 
 // add employee
 const create = () => {
@@ -175,27 +168,25 @@ const create = () => {
       },
     ])
     .then((answers) => {
-      
-      
       connection.query(
         `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answers.emp_fn}', '${answers.emp_ln}', ${answers.role_id}, ${answers.manager_id})`
-        ),
+      ),
         (err, res) => {
           if (err) throw err;
         };
-        connection.query(
-          `INSERT INTO department (id, name) VALUES (${answers.dep_id}, '${answers.dep_name}')`
-          ),
-          (err, res) => {
-            if (err) throw err;
-          };
-          connection.query(
-            `INSERT INTO role (id, title, salary, department_id) VALUES (${answers.role_id}, '${answers.role_title}', ${answers.role_salary}, ${answers.dep_id})`
-            ),
-            (err, res) => {
-              if (err) throw err;
-            };
-          
+      connection.query(
+        `INSERT INTO department (id, name) VALUES (${answers.dep_id}, '${answers.dep_name}')`
+      ),
+        (err, res) => {
+          if (err) throw err;
+        };
+      connection.query(
+        `INSERT INTO role (id, title, salary, department_id) VALUES (${answers.role_id}, '${answers.role_title}', ${answers.role_salary}, ${answers.dep_id})`
+      ),
+        (err, res) => {
+          if (err) throw err;
+        };
+
       init();
     });
 };
