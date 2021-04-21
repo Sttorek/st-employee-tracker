@@ -73,10 +73,18 @@ function init() {
 const viewAll = () => {
 
   console.log("-----------------View All Employees-----------------")
-  let query = "SELECT first_name, last_name FROM employee"
+  let query = "SELECT first_name, last_name, id FROM employee;"
   connection.query(query, function (err, res) {
     if (err) throw err;
-    console.log(json(res));
+    for (var i = 0; i < res.length; i++) {
+
+      console.log(
+        "Name:  " + res[i].first_name + " " + res[i].last_name + "  ||  " + "ID: " + res[i].id
+        
+        );
+       
+    }
+
   });
 };
 
