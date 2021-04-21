@@ -68,9 +68,23 @@ function init() {
     });
 }
 
-// const viewAll = () => {
 
-// }
+
+const viewAll = () => {
+
+  console.log("-----------------View All Employees-----------------")
+  let query = "SELECT first_name, last_name FROM employee"
+  connection.query(query, function (err, res) {
+    if (err) throw err;
+    console.log(json(res));
+  });
+};
+
+
+
+
+
+
 
 const remove = () => {
   inquirer
@@ -78,49 +92,34 @@ const remove = () => {
       {
         type: `input`,
         message:
-          "What is the first name of the employee you would like to remove?",
+          "What is the employee ID of the person you would like to remove?",
         name: `remove`,
-      },
-      {
-        type: `input`,
-        message: "What is the employee's department ID?",
-        name: `id`,
-      },
-      {
-        type: `input`,
-        message: "What is the employee's title?",
-        name: `title`,
       },
     ])
     .then((answers) => {
       console.log(answers);
       connection.query(
-        `DELETE FROM department WHERE id = ${answers.id};`,
+        `DELETE FROM role WHERE employee_id = ${answers.remove};`,
         (err, res) => {
           if (err) throw err;
-          console.log("delete department", res);
+        });
+        connection.query(
+          `DELETE FROM department WHERE employee_id = ${answers.remove};`,
+          (err, res) => {
+            if (err) throw err;
+          });
           connection.query(
-            `DELETE FROM role WHERE title = ${answers.title};`,
+            `DELETE FROM employee WHERE id = ${answers.remove};`,
             (err, res) => {
               if (err) throw err;
-              console.log("delete role", res);
-              connection.query(
-                `DELETE FROM employee WHERE first_name = ${answers.remove};`,
-                (err, res) => {
-                  if (err) throw err;
-                  console.log("delete employee", res);
-                  console.log("Employee Removed!!!");
-                  init();
-                  //* restructure entire function 
-                }
-              );
-            }
-          );
-        }
-      );
-
+              console.log("Employee Removed");
+              init();
+            });
     });
 };
+
+ 
+
 
 // add employee
 const create = () => {
@@ -153,11 +152,6 @@ const create = () => {
       },
       {
         type: `input`,
-        message: "What is the employee ID?",
-        name: `emp_id`,
-      },
-      {
-        type: `input`,
         message: "What is the employee first name?",
         name: `emp_fn`,
       },
@@ -173,27 +167,27 @@ const create = () => {
       },
     ])
     .then((answers) => {
+      
+      
       connection.query(
-        `INSERT INTO department (id, name) VALUES (${answers.dep_id}, '${answers.dep_name}')`
-      ),
+        `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answers.emp_fn}', '${answers.emp_ln}', ${answers.role_id}, ${answers.manager_id})`
+        ),
         (err, res) => {
           if (err) throw err;
         };
-
-      connection.query(
-        `INSERT INTO role (id, title, salary, department_id) VALUES (${answers.role_id}, '${answers.role_title}', ${answers.role_salary}, ${answers.dep_id})`
-      ),
-        (err, res) => {
-          if (err) throw err;
-        };
-
-      connection.query(
-        `INSERT INTO employee (id, first_name, last_name, role_id, manager_id) VALUES (${answers.emp_id}, '${answers.emp_fn}', '${answers.emp_ln}', ${answers.role_id}, ${answers.manager_id})`
-      ),
-        (err, res) => {
-          if (err) throw err;
-        };
-
+        connection.query(
+          `INSERT INTO department (id, name) VALUES (${answers.dep_id}, '${answers.dep_name}')`
+          ),
+          (err, res) => {
+            if (err) throw err;
+          };
+          connection.query(
+            `INSERT INTO role (id, title, salary, department_id) VALUES (${answers.role_id}, '${answers.role_title}', ${answers.role_salary}, ${answers.dep_id})`
+            ),
+            (err, res) => {
+              if (err) throw err;
+            };
+          
       init();
     });
 };
