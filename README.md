@@ -10,6 +10,3 @@ This application will help a business keep track of their employees through a da
 To use in terminal run npm i to install dependencies. Then run node index.js. Select what task you would like completed.
 
 
-## Link
-See the deployed site here
-[Heroku]("")

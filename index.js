@@ -43,25 +43,22 @@ function init() {
     ])
     .then((answers) => {
       if (answers.init == "View all employees") {
-        // use connection.query to list out all of the employee names and information about them.
-        // use join
+        
         viewAll();
       } else if (answers.init == "View all employees by department") {
-        //   join
-        // use inquirer to prompt which department then display employees for that department.
+        
       } else if (answers.init == "View all employees by Manager") {
-        //   join
-        //   use inquirer to ask which manager then display employees for that manager
+     
       } else if (answers.init == "Add employee") {
-        //  use CREATE to add data to table
+        
         create();
       } else if (answers.init == "Remove employee") {
-        //   use DELETE to remove employee
+        
         remove();
       } else if (answers.init == "Update employee role") {
-        //   use UPDATE to update employee role
+       
       } else if (answers.init == "Update employee manager") {
-        //   use UPDATE to update manager information
+       
       } else if (answers.init == "Exit") {
         connection.end();
       }
